@@ -1,5 +1,7 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import SelectBox from "../ui/form/select-box";
+import { SolaceTopicPublisher } from "../../services/solace-topic-publisher";
+import CONFIG_CONSTANT from "../../services/config-constant";
 
 const environments = [
   { text: "Staging", value: "Staging" },
@@ -8,14 +10,23 @@ const environments = [
 
 export default function EstablishCall() {
   console.info('##### Refreshing #######');
+  const [callStatus, setCallStatus] = useState('Not Started');
   const staffIdInputElement = useRef();
   const environmentRef = useRef(environments[0].value);
   const pnrInputElement = useRef();
   const profileInputElement = useRef();
   const callerNumberInputElement = useRef();
+  const solaceTopicPublisherRef = useRef(new SolaceTopicPublisher());
 
   const setEnvironment = useCallback(() => (env) => {
     environmentRef.current = env;
+  }, []);
+
+  useEffect(() => {
+    solaceTopicPublisherRef.current.connect();
+    return () => {
+      solaceTopicPublisherRef.current.disconnect();
+    }
   }, []);
 
   const onCallEstablished = useCallback(
@@ -28,7 +39,14 @@ export default function EstablishCall() {
         profile: profileInputElement.current?.value,
         callerNumber: callerNumberInputElement.current?.value,
       };
-      console.log(data);
+      setCallStatus('Connecting...');
+      solaceTopicPublisherRef.current.publishTopic(CONFIG_CONSTANT.SOLACE.TOPICS.CALL_ESTABLISHED, JSON.stringify(data))
+        .then(() => {
+          setCallStatus('Call Established');
+        })
+        .catch(() => {
+          setCallStatus('Failed to Established Call');
+        });
     },
     []
   );
@@ -43,7 +61,14 @@ export default function EstablishCall() {
         profile: profileInputElement.current?.value,
         callerNumber: callerNumberInputElement.current?.value,
       };
-      console.log(data);
+      setCallStatus('Connecting...');
+      solaceTopicPublisherRef.current.publishTopic(CONFIG_CONSTANT.SOLACE.TOPICS.CALL_DISCONNECT, JSON.stringify(data))
+        .then(() => {
+          setCallStatus('Call Disconnected');
+        })
+        .catch(() => {
+          setCallStatus('Failed to Disconnected');
+        });
     },
     []
   );
@@ -136,8 +161,8 @@ export default function EstablishCall() {
 
       <div className="mt-6 flex justify-between gap-x-6">
         <div>
-          <span>Status : </span>
-          <span></span>
+          <span>Status:</span>
+          <span className="pl-2 font-bold">{ callStatus }</span>
         </div>
         <div>
           <button

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.svg?color=indigo&shade=500";
 
 const user = {
-  name: "User",
   email: "noreply@noreply.com"
 };
 const navigation = [
@@ -111,10 +110,9 @@ export default function Navbar() {
           <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
               {navigation.map((item) => (
-                <Disclosure.Button
+                <Link
                   key={item.name}
-                  as="a"
-                  href={item.href}
+                  to={item.href}
                   className={classNames(
                     item.current
                       ? "bg-gray-900 text-white"
@@ -124,7 +122,7 @@ export default function Navbar() {
                   aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
-                </Disclosure.Button>
+                </Link>
               ))}
             </div>
             <div className="border-t border-gray-700 pb-3 pt-4">
