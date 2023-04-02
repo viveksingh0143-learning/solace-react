@@ -10,6 +10,7 @@ const user = {
 };
 const navigation = [
   { name: "GC+ Simulator", href: "/", current: true },
+  { name: "Solace Call Subscriber", href: "/solace-call-subscriber", current: false },
   { name: "Support", href: "/support", current: false },
 ];
 const userNavigation = [{ name: "Sign out", href: "#" }];

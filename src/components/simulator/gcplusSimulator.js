@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
-import EstablishCall from './establish-call'
-import IVRPayment from './ivr-payment'
+import EstablishCall from './establishCall'
+import IVRPayment from './ivrPayment'
 
 export default function GCPlusSimulator() {
     return (

@@ -10,6 +10,7 @@ const CONFIG_CONSTANT = {
         TOPICS: {
             CALL_ESTABLISHED: process.env.SOLACE_TOPIC_CALL_ESTABLISHED,
             CALL_DISCONNECT: process.env.SOLACE_TOPIC_CALL_DISCONNECT,
+            CALL: process.env.SOLACE_TOPIC_CALL,
             IVR_PAYMENT_INITIATE: process.env.SOLACE_TOPIC_IVR_PAYMENT_INITIATE,
         }
     }
